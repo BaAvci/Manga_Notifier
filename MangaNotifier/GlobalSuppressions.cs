@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Style", "IDE0022:Use expression body for method", Justification = "<Pending>", Scope = "member", Target = "~M:MyApp.Program.Main(System.String[])")]
+[assembly: SuppressMessage("Style", "IDE0007:Use implicit type", Justification = "<Pending>", Scope = "member", Target = "~M:Manga_Notifier.Crawler.Crawl")]

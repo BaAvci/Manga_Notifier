@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Manga_Notifier;
+using System;
 
 namespace MyApp // Note: actual namespace depends on the project name.
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Crawler crawler = new();
+            await crawler.GetWebPage();
         }
     }
 }
