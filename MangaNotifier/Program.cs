@@ -8,7 +8,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
         static async Task Main(string[] args)
         {
             Crawler crawler = new();
-            await crawler.GetWebPage();
+            await crawler.GetWebPage("https://asuratoon.com/manga/?order=update");
         }
     }
 }
