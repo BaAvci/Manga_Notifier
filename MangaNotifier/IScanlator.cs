@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Manga_Notifier
 {
-    interface IScanlators
+    public interface IScanlators
     {
         List<string> GetAllComics(string responsBody);
         void ParseURLS(string webPage);
