@@ -16,7 +16,6 @@ namespace Manga_Notifier
         private List<string> comicURLS = new();
         public async Task GetWebPage(string url)
         {
-            IScanlators scanlators = new Asurascans(url);
             HttpClient client = new()
             {
                 Timeout = TimeSpan.FromSeconds(60)
