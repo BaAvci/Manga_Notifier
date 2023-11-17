@@ -23,7 +23,7 @@ namespace Manga_Notifier
             HtmlDocument htmlDocument = new();
             List<string> comicSeriesInfos = new();
             htmlDocument.LoadHtml(responsBody);
-            HtmlNodeCollection nodes = htmlDocument.DocumentNode.SelectNodes("//a/@href");
+            HtmlNodeCollection nodes = htmlDocument.DocumentNode.SelectNodes("//div[contains(@class, \"grid\")][1]/div/div/a/@href");
             foreach (HtmlNode node in nodes)
             {
                 comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
@@ -36,14 +36,14 @@ namespace Manga_Notifier
             Series_Info series_Info = new();
             HtmlDocument htmlDocument = new();
             htmlDocument.LoadHtml(webPage);
-            HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("///li[1]/a[1]");
+            HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("//li/a[1]");
 
-            series_Info.Name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim();
-            var comicURL = htmlDocument.DocumentNode.SelectSingleNode("//li/a").GetAttributeValue("href", "-999");
+            series_Info.Name = htmlDocument.DocumentNode.SelectSingleNode("//h1[1]").InnerText.Trim();
+            var comicURL = node.GetAttributeValue("href", "-999");
             Match m = Regex.Match(comicURL, "([0-9]+)");
             series_Info.Id = int.Parse(m.Value);
             series_Info.URL = node.GetAttributeValue("href", string.Empty);
-            series_Info.ChapterName = node.SelectSingleNode("./li//div/div/div/div/p[@class]").InnerText.Trim();
+            series_Info.ChapterName = node.SelectSingleNode(".//p[1]").InnerText.Trim();
 
             Console.WriteLine(series_Info.Name);
             Console.WriteLine(series_Info.Id);

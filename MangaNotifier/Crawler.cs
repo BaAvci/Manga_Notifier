@@ -20,11 +20,12 @@ namespace Manga_Notifier
             {
                 Timeout = TimeSpan.FromSeconds(60)
             };
+            client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.");
 
             HttpResponseMessage response = await client.GetAsync(url);
 
-            if (response.IsSuccessStatusCode)
-            {
+           if (response.IsSuccessStatusCode)
+           {
                 var responsBody = await client.GetStringAsync(url);
                 if (!string.IsNullOrWhiteSpace(responsBody))
                 {
@@ -38,7 +39,7 @@ namespace Manga_Notifier
                         }
                     }
                 }
-            }
+           }
         }
     }
 }
