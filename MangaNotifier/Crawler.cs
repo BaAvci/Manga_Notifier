@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 
 using static System.Net.WebRequestMethods;
+using System.Linq.Expressions;
 
 namespace Manga_Notifier
 {
@@ -24,22 +25,41 @@ namespace Manga_Notifier
 
             HttpResponseMessage response = await client.GetAsync(url);
 
-           if (response.IsSuccessStatusCode)
-           {
+            if (response.IsSuccessStatusCode)
+            {
                 var responsBody = await client.GetStringAsync(url);
                 if (!string.IsNullOrWhiteSpace(responsBody))
                 {
                     comicURLS = scanlators.GetAllComics(responsBody);
                     foreach (var comic in comicURLS)
                     {
-                        responsBody = await client.GetStringAsync(comic);
-                        if (!string.IsNullOrWhiteSpace(responsBody))
+                        HttpResponseMessage comicResponse = await client.GetAsync(comic);
+                        while (!comicResponse.IsSuccessStatusCode)
                         {
-                            scanlators.ParseURLS(responsBody);
+                            Thread.Sleep(2000);
+                            comicResponse = await client.GetAsync(comic);
+                            Thread.Sleep(2000);
+                        }
+                        try
+                        {
+                            responsBody = await client.GetStringAsync(comic);
+                            if (!string.IsNullOrWhiteSpace(responsBody))
+                            {
+                                scanlators.ParseURLS(responsBody);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            e.Source = url;
+                            await Console.Out.WriteLineAsync(e.Message);
+                            await Console.Out.WriteLineAsync(e.Source);
+                            await Console.Out.WriteLineAsync(comic);
+                            await Console.Out.WriteLineAsync(comicURLS.Count().ToString());
+                            await Console.Out.WriteLineAsync(comicURLS.IndexOf(comic).ToString());
                         }
                     }
                 }
-           }
+            }
         }
     }
 }
