@@ -31,20 +31,20 @@ namespace Manga_Notifier
 
         public void ParseURLS(string webPage)
         {
-            Series_Info series_Info = new();
             HtmlDocument htmlDocument = new();
             htmlDocument.LoadHtml(webPage);
             HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("//li[1]/div/div/a[@href]");
 
-            series_Info.Name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim();
-            series_Info.Id = int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//div[@class='bookmark']").GetAttributeValue("data-id", "-999"));
-            series_Info.URL = node.GetAttributeValue("href", string.Empty);
-            series_Info.ChapterName = node.SelectSingleNode("./span[@class='chapternum']").InnerText.Trim();
-
-            Console.WriteLine(series_Info.Name);
-            Console.WriteLine(series_Info.Id);
-            Console.WriteLine(series_Info.URL);
-            Console.WriteLine(series_Info.ChapterName);
+            seriesInfo.Add(new Series_Info
+            {
+                Name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim(),
+                Id = int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//div[@class='bookmark']").GetAttributeValue("data-id", "-999")),
+                URL = node.GetAttributeValue("href", string.Empty),
+                ChapterName = node.SelectSingleNode("./span[@class='chapternum']").InnerText.Trim()
+            });
         }
+
+        public string Url => url;
+        public List<Series_Info> SeriesInfo => seriesInfo;
     }
 }

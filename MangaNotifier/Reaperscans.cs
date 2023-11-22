@@ -8,11 +8,11 @@ using System.Text.RegularExpressions;
 
 namespace Manga_Notifier
 {
-    public class Reapoerscans : IScanlators
+    public class Reaperscans : IScanlators
     {
         private readonly string url;
         private List<Series_Info> seriesInfo;
-        public Reapoerscans(string url)
+        public Reaperscans(string url)
         {
             this.url = url;
             seriesInfo = new List<Series_Info>();
@@ -33,22 +33,22 @@ namespace Manga_Notifier
 
         public void ParseURLS(string webPage)
         {
-            Series_Info series_Info = new();
             HtmlDocument htmlDocument = new();
             htmlDocument.LoadHtml(webPage);
             HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("//li/a[1]");
-
-            series_Info.Name = htmlDocument.DocumentNode.SelectSingleNode("//h1[1]").InnerText.Trim();
             var comicURL = node.GetAttributeValue("href", "-999");
             Match m = Regex.Match(comicURL, "([0-9]+)");
-            series_Info.Id = int.Parse(m.Value);
-            series_Info.URL = node.GetAttributeValue("href", string.Empty);
-            series_Info.ChapterName = node.SelectSingleNode(".//p[1]").InnerText.Trim();
 
-            Console.WriteLine(series_Info.Name);
-            Console.WriteLine(series_Info.Id);
-            Console.WriteLine(series_Info.URL);
-            Console.WriteLine(series_Info.ChapterName);
+            seriesInfo.Add(new Series_Info
+            {
+                Name = htmlDocument.DocumentNode.SelectSingleNode("//h1[1]").InnerText.Trim(),
+                Id = int.Parse(m.Value),
+                URL = node.GetAttributeValue("href", string.Empty),
+                ChapterName = node.SelectSingleNode(".//p[1]").InnerText.Trim()
+            });
         }
+
+        public string Url => url;
+        public List<Series_Info> SeriesInfo => seriesInfo;
     }
 }
