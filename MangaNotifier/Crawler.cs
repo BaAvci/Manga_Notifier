@@ -9,6 +9,7 @@ using System.Net.Http;
 
 using static System.Net.WebRequestMethods;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Manga_Notifier
 {
@@ -23,42 +24,49 @@ namespace Manga_Notifier
             };
             client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.");
 
-            HttpResponseMessage response = await client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var responsBody = await client.GetStringAsync(url);
-                if (!string.IsNullOrWhiteSpace(responsBody))
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    comicURLS = scanlators.GetAllComics(responsBody);
-                    foreach (var comic in comicURLS)
+                    var responsBody = await client.GetStringAsync(url);
+                    if (!string.IsNullOrWhiteSpace(responsBody))
                     {
-                        HttpResponseMessage comicResponse = await client.GetAsync(comic);
-                        while (!comicResponse.IsSuccessStatusCode)
+                        comicURLS = scanlators.GetAllComics(responsBody);
+                        foreach (var comic in comicURLS)
                         {
-                            Thread.Sleep(2000);
-                            comicResponse = await client.GetAsync(comic);
-                            Thread.Sleep(2000);
-                        }
-                        try
-                        {
-                            responsBody = await client.GetStringAsync(comic);
-                            if (!string.IsNullOrWhiteSpace(responsBody))
+                            HttpResponseMessage comicResponse = await client.GetAsync(comic);
+                            while (!comicResponse.IsSuccessStatusCode)
                             {
-                                scanlators.ParseURLS(responsBody);
+                                Thread.Sleep(2000);
+                                comicResponse = await client.GetAsync(comic);
+                                Thread.Sleep(2000);
                             }
-                        }
-                        catch (Exception e)
-                        {
-                            e.Source = url;
-                            await Console.Out.WriteLineAsync(e.Message);
-                            await Console.Out.WriteLineAsync(e.Source);
-                            await Console.Out.WriteLineAsync(comic);
-                            await Console.Out.WriteLineAsync(comicURLS.Count().ToString());
-                            await Console.Out.WriteLineAsync(comicURLS.IndexOf(comic).ToString());
+                            try
+                            {
+                                responsBody = await client.GetStringAsync(comic);
+                                if (!string.IsNullOrWhiteSpace(responsBody))
+                                {
+                                    scanlators.ParseURLS(responsBody);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                e.Source = url;
+                                await Console.Out.WriteLineAsync(e.Message);
+                                await Console.Out.WriteLineAsync(e.Source);
+                                await Console.Out.WriteLineAsync(comic);
+                                await Console.Out.WriteLineAsync(comicURLS.Count().ToString());
+                                await Console.Out.WriteLineAsync(comicURLS.IndexOf(comic).ToString());
+                            }
                         }
                     }
                 }
+            }
+            catch(Exception e) 
+            {
+                await Console.Out.WriteLineAsync("Site is not reachable.");
             }
         }
     }
