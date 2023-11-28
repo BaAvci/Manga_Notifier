@@ -36,10 +36,10 @@ namespace Manga_Notifier
             HtmlDocument htmlDocument = new();
             htmlDocument.LoadHtml(webPage);
             HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("//div/ul/li[1]");
-
+            var name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim();
             seriesInfo.Add(new Series_Info
             {
-                Name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim(),
+                Name = System.Web.HttpUtility.HtmlDecode(name),
                 Id = int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//div[@class='bookmark']").GetAttributeValue("data-id", "-999")),
                 URL = node.SelectSingleNode("./a").GetAttributeValue("href", string.Empty),
                 ChapterName = node.GetAttributeValue("data-num", "-999")
