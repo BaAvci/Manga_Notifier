@@ -1,20 +1,21 @@
 using Manga_Notifier.Scanlators;
 using System;
 using System.Security.Claims;
+using Unit_Tests.Crawling;
 
-namespace Unit_Tests.Crawling
+namespace Unit_Tests
 {
     public class SourceViewParserTest
     {
 
-        readonly TestFiles testFiles;
+        readonly SourceView_Path_finder testFiles;
 
         readonly IScanlators asurascans;
         readonly IScanlators flamescans;
 
-        public SourceViewParserTest()
+        public SourceViewParserTest() 
         {
-            testFiles = new TestFiles();
+            testFiles = new SourceView_Path_finder();
 
             asurascans = new Asurascans(""); //URL is currently not needed
             flamescans = new FlamScans(""); //URL is currently not needed
