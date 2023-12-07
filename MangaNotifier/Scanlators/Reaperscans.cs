@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace Manga_Notifier.Scanlators
     public class Reaperscans : IScanlators
     {
         private readonly string url;
-        private List<Series_Info> seriesInfo;
+        private readonly List<Series_Info> seriesInfo;
         public Reaperscans(string url)
         {
             this.url = url;
@@ -39,9 +39,11 @@ namespace Manga_Notifier.Scanlators
             var node = htmlDocument.DocumentNode.SelectSingleNode("//li/a[1]");
             var comicURL = node.GetAttributeValue("href", "-999");
             var m = Regex.Match(comicURL, "([0-9]+)");
+            var scanlator = new Regex("(?<=:\\/\\/)(?:.*)(?=\\.)").Match(url).Value;
 
             seriesInfo.Add(new Series_Info
             {
+                Scanlator = char.ToUpper(scanlator[0]) + scanlator.Substring(1),
                 Name = htmlDocument.DocumentNode.SelectSingleNode("//h1[1]").InnerText.Trim(),
                 Id = int.Parse(m.Value),
                 URL = node.GetAttributeValue("href", string.Empty),

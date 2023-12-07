@@ -1,9 +1,10 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using Manga_Notifier.Scanlators.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Manga_Notifier.Scanlators
@@ -11,7 +12,7 @@ namespace Manga_Notifier.Scanlators
     public class FlamScans : IScanlators
     {
         private readonly string url;
-        private List<Series_Info> seriesInfo;
+        private readonly List<Series_Info> seriesInfo;
         public FlamScans(string url)
         {
             this.url = url;
@@ -38,8 +39,11 @@ namespace Manga_Notifier.Scanlators
             htmlDocument.LoadHtml(webPage);
             var node = htmlDocument.DocumentNode.SelectSingleNode("//div/ul/li[1]");
             var name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim();
+            var scanlator = new Regex("(?<=:\\/\\/)(?:.*)(?=\\.)").Match(url).Value;
+
             seriesInfo.Add(new Series_Info
             {
+                Scanlator = char.ToUpper(scanlator[0]) + scanlator.Substring(1),
                 Name = System.Web.HttpUtility.HtmlDecode(name),
                 Id = int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//div[@class='bookmark']").GetAttributeValue("data-id", "-999")),
                 URL = node.SelectSingleNode("./a").GetAttributeValue("href", string.Empty),
