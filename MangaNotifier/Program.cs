@@ -1,4 +1,6 @@
-﻿using Manga_Notifier;
+﻿using Manga_Notifier.Crawling;
+using Manga_Notifier.Scanlators;
+using Manga_Notifier.Scanlators.Model;
 using System;
 
 namespace MyApp // Note: actual namespace depends on the project name.

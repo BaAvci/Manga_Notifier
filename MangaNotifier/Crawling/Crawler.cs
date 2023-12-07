@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,8 +10,9 @@ using System.Net.Http;
 using static System.Net.WebRequestMethods;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using Manga_Notifier.Scanlators;
 
-namespace Manga_Notifier
+namespace Manga_Notifier.Crawling
 {
     public class Crawler
     {
@@ -26,18 +27,18 @@ namespace Manga_Notifier
 
             try
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                var response = await client.GetAsync(url);
 
-                if (response.IsSuccessStatusCode)
+                if(response.IsSuccessStatusCode)
                 {
                     var responsBody = await client.GetStringAsync(url);
-                    if (!string.IsNullOrWhiteSpace(responsBody))
+                    if(!string.IsNullOrWhiteSpace(responsBody))
                     {
                         comicURLS = scanlators.GetAllComics(responsBody);
-                        foreach (var comic in comicURLS)
+                        foreach(var comic in comicURLS)
                         {
-                            HttpResponseMessage comicResponse = await client.GetAsync(comic);
-                            while (!comicResponse.IsSuccessStatusCode)
+                            var comicResponse = await client.GetAsync(comic);
+                            while(!comicResponse.IsSuccessStatusCode)
                             {
                                 Thread.Sleep(2000);
                                 comicResponse = await client.GetAsync(comic);
@@ -46,12 +47,10 @@ namespace Manga_Notifier
                             try
                             {
                                 responsBody = await client.GetStringAsync(comic);
-                                if (!string.IsNullOrWhiteSpace(responsBody))
-                                {
+                                if(!string.IsNullOrWhiteSpace(responsBody))
                                     scanlators.ParseURLS(responsBody);
-                                }
                             }
-                            catch (Exception e)
+                            catch(Exception e)
                             {
                                 e.Source = url;
                                 await Console.Out.WriteLineAsync(e.Message);
@@ -64,7 +63,7 @@ namespace Manga_Notifier
                     }
                 }
             }
-            catch(Exception e) 
+            catch(Exception e)
             {
                 await Console.Out.WriteLineAsync("Site is not reachable.");
             }

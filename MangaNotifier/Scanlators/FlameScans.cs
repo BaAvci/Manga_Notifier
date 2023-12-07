@@ -1,18 +1,18 @@
 ﻿using HtmlAgilityPack;
+using Manga_Notifier.Scanlators.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
-namespace Manga_Notifier
+namespace Manga_Notifier.Scanlators
 {
-    public class Reaperscans : IScanlators
+    public class FlamScans : IScanlators
     {
         private readonly string url;
         private List<Series_Info> seriesInfo;
-        public Reaperscans(string url)
+        public FlamScans(string url)
         {
             this.url = url;
             seriesInfo = new List<Series_Info>();
@@ -23,29 +23,29 @@ namespace Manga_Notifier
             HtmlDocument htmlDocument = new();
             List<string> comicSeriesInfos = new();
             htmlDocument.LoadHtml(responsBody);
-            HtmlNodeCollection nodes = htmlDocument.DocumentNode.SelectNodes("//div[contains(@class, \"grid\")][1]/div/div/a/@href");
-            foreach (HtmlNode node in nodes)
+            var nodes = htmlDocument.DocumentNode.SelectNodes("//div[@class='bs']/div/a");
+            foreach(var node in nodes)
             {
                 comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
             }
             return comicSeriesInfos;
         }
 
+        // TODO: Fix string error regarding titels with (') in the name.
         public void ParseURLS(string webPage)
         {
             HtmlDocument htmlDocument = new();
             htmlDocument.LoadHtml(webPage);
-            HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("//li/a[1]");
-            var comicURL = node.GetAttributeValue("href", "-999");
-            Match m = Regex.Match(comicURL, "([0-9]+)");
-
+            var node = htmlDocument.DocumentNode.SelectSingleNode("//div/ul/li[1]");
+            var name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim();
             seriesInfo.Add(new Series_Info
             {
-                Name = htmlDocument.DocumentNode.SelectSingleNode("//h1[1]").InnerText.Trim(),
-                Id = int.Parse(m.Value),
-                URL = node.GetAttributeValue("href", string.Empty),
-                ChapterName = node.SelectSingleNode(".//p[1]").InnerText.Trim()
+                Name = System.Web.HttpUtility.HtmlDecode(name),
+                Id = int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//div[@class='bookmark']").GetAttributeValue("data-id", "-999")),
+                URL = node.SelectSingleNode("./a").GetAttributeValue("href", string.Empty),
+                ChapterName = node.GetAttributeValue("data-num", "-999")
             });
+
         }
 
         public string Url => url;

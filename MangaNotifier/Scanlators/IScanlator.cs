@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Manga_Notifier.Scanlators.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manga_Notifier
+namespace Manga_Notifier.Scanlators
 {
     public interface IScanlators
     {

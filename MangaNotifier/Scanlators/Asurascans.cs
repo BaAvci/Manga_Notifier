@@ -1,17 +1,18 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
+using Manga_Notifier.Scanlators.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manga_Notifier
+namespace Manga_Notifier.Scanlators
 {
-    public class FlamScans : IScanlators
+    public class Asurascans : IScanlators
     {
         private readonly string url;
         private List<Series_Info> seriesInfo;
-        public FlamScans(string url)
+        public Asurascans(string url)
         {
             this.url = url;
             seriesInfo = new List<Series_Info>();
@@ -22,29 +23,27 @@ namespace Manga_Notifier
             HtmlDocument htmlDocument = new();
             List<string> comicSeriesInfos = new();
             htmlDocument.LoadHtml(responsBody);
-            HtmlNodeCollection nodes = htmlDocument.DocumentNode.SelectNodes("//div[@class='bs']/div/a");
-            foreach (HtmlNode node in nodes)
+            var nodes = htmlDocument.DocumentNode.SelectNodes("//div/div[@class='bsx']/a/@href");
+            foreach(var node in nodes)
             {
                 comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
             }
             return comicSeriesInfos;
         }
-        
-        // TODO: Fix string error regarding titels with (') in the name.
+
         public void ParseURLS(string webPage)
         {
             HtmlDocument htmlDocument = new();
             htmlDocument.LoadHtml(webPage);
-            HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("//div/ul/li[1]");
-            var name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim();
+            var node = htmlDocument.DocumentNode.SelectSingleNode("//li[1]/div/div/a[@href]");
+
             seriesInfo.Add(new Series_Info
             {
-                Name = System.Web.HttpUtility.HtmlDecode(name),
+                Name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim(),
                 Id = int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//div[@class='bookmark']").GetAttributeValue("data-id", "-999")),
-                URL = node.SelectSingleNode("./a").GetAttributeValue("href", string.Empty),
-                ChapterName = node.GetAttributeValue("data-num", "-999")
+                URL = node.GetAttributeValue("href", string.Empty),
+                ChapterName = node.SelectSingleNode("./span[@class='chapternum']").InnerText.Trim()
             });
-
         }
 
         public string Url => url;

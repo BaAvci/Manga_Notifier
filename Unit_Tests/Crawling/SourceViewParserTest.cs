@@ -1,8 +1,8 @@
-﻿using Manga_Notifier;
+using Manga_Notifier.Scanlators;
 using System;
 using System.Security.Claims;
 
-namespace Unit_Tests
+namespace Unit_Tests.Crawling
 {
     public class SourceViewParserTest
     {
@@ -12,7 +12,7 @@ namespace Unit_Tests
         readonly IScanlators asurascans;
         readonly IScanlators flamescans;
 
-        public SourceViewParserTest() 
+        public SourceViewParserTest()
         {
             testFiles = new TestFiles();
 

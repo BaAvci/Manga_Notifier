@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using Manga_Notifier.Scanlators.Model;
 
-namespace Manga_Notifier
+namespace Manga_Notifier.Scanlators
 {
-    public class Asurascans : IScanlators
+    public class Reaperscans : IScanlators
     {
         private readonly string url;
         private List<Series_Info> seriesInfo;
-        public Asurascans(string url) { 
+        public Reaperscans(string url)
+        {
             this.url = url;
             seriesInfo = new List<Series_Info>();
         }
@@ -21,8 +24,8 @@ namespace Manga_Notifier
             HtmlDocument htmlDocument = new();
             List<string> comicSeriesInfos = new();
             htmlDocument.LoadHtml(responsBody);
-            HtmlNodeCollection nodes = htmlDocument.DocumentNode.SelectNodes("//div/div[@class='bsx']/a/@href");
-            foreach (HtmlNode node in nodes)
+            var nodes = htmlDocument.DocumentNode.SelectNodes("//div[contains(@class, \"grid\")][1]/div/div/a/@href");
+            foreach(var node in nodes)
             {
                 comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
             }
@@ -33,14 +36,16 @@ namespace Manga_Notifier
         {
             HtmlDocument htmlDocument = new();
             htmlDocument.LoadHtml(webPage);
-            HtmlNode node = htmlDocument.DocumentNode.SelectSingleNode("//li[1]/div/div/a[@href]");
+            var node = htmlDocument.DocumentNode.SelectSingleNode("//li/a[1]");
+            var comicURL = node.GetAttributeValue("href", "-999");
+            var m = Regex.Match(comicURL, "([0-9]+)");
 
             seriesInfo.Add(new Series_Info
             {
-                Name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim(),
-                Id = int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//div[@class='bookmark']").GetAttributeValue("data-id", "-999")),
+                Name = htmlDocument.DocumentNode.SelectSingleNode("//h1[1]").InnerText.Trim(),
+                Id = int.Parse(m.Value),
                 URL = node.GetAttributeValue("href", string.Empty),
-                ChapterName = node.SelectSingleNode("./span[@class='chapternum']").InnerText.Trim()
+                ChapterName = node.SelectSingleNode(".//p[1]").InnerText.Trim()
             });
         }
 
