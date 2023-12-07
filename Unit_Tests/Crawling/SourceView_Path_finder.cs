@@ -30,17 +30,30 @@ namespace Unit_Tests.Crawling
             FlameSingle2ComicPath = GetFileViews("Flamescans", "Is This Hero for Real_ - Flame Comics.html");
             FlameSingle3ComicPath = GetFileViews("Flamescans", "I'll be Taking a Break for Personal Reasons - Flame Comics.html");
         }
+        /// <summary>
+        /// Get's the root directory of the currently executed method
+        /// </summary>
+        /// <returns></returns>
         public string GetRootPath()
         {
             var pwd = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory);
             return pwd.Parent.Parent.Parent.FullName;
         }
 
+        /// <summary>
+        /// Returns the root path combined with SourceViews
+        /// </summary>
+        /// <returns></returns>
         public string GetSourceViews()
         {
             return Path.Join(GetRootPath(), "SourceViews");
         }
 
+        /// <summary>
+        /// Returns a dynamic path depending on the scanlator name and the comic name.
+        /// </summary>
+        /// <param name="fragments"></param>
+        /// <returns></returns>
         public string GetFileViews(params string[] fragments)
         {
             var first = new string[] { GetSourceViews() };

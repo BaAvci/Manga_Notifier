@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Manga_Notifier.Scanlators.Model
 {
-    public class Series_Info
+    /// <summary>
+    /// The model for all the Information about a single comic
+    /// </summary>
+    public class Comic_Info
     {
         public string? Scanlator { get; set; }
         public int? Id { get; set; }

@@ -12,11 +12,11 @@ namespace Manga_Notifier.Scanlators
     public class FlamScans : IScanlators
     {
         private readonly string url;
-        private readonly List<Series_Info> seriesInfo;
+        private readonly List<Comic_Info> seriesInfo;
         public FlamScans(string url)
         {
             this.url = url;
-            seriesInfo = new List<Series_Info>();
+            seriesInfo = new List<Comic_Info>();
         }
 
         public List<string> GetAllComics(string responsBody)
@@ -32,7 +32,6 @@ namespace Manga_Notifier.Scanlators
             return comicSeriesInfos;
         }
 
-        // TODO: Fix string error regarding titels with (') in the name.
         public void ParseURLS(string webPage)
         {
             HtmlDocument htmlDocument = new();
@@ -41,7 +40,7 @@ namespace Manga_Notifier.Scanlators
             var name = htmlDocument.DocumentNode.SelectSingleNode("//h1").InnerText.Trim();
             var scanlator = new Regex("(?<=:\\/\\/)(?:.*)(?=\\.)").Match(url).Value;
 
-            seriesInfo.Add(new Series_Info
+            seriesInfo.Add(new Comic_Info
             {
                 Scanlator = char.ToUpper(scanlator[0]) + scanlator.Substring(1),
                 Name = System.Web.HttpUtility.HtmlDecode(name),
@@ -53,6 +52,6 @@ namespace Manga_Notifier.Scanlators
         }
 
         public string Url => url;
-        public List<Series_Info> SeriesInfo => seriesInfo;
+        public List<Comic_Info> SeriesInfo => seriesInfo;
     }
 }

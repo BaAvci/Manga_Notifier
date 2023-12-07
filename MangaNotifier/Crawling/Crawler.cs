@@ -15,7 +15,10 @@ namespace Manga_Notifier.Crawling
 {
     public class Crawler
     {
-
+        /// <summary>
+        /// Starts the crawling process
+        /// </summary>
+        /// <param name="scanlator"></param>
         public void Crawl(IScanlators scanlator)
         {
             var client = ClientGenerator();
@@ -58,6 +61,12 @@ namespace Manga_Notifier.Crawling
             }
         }
 
+        /// <summary>
+        /// Returns the source view from a page
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
         private async Task<string> CrawlPage(HttpClient client, string url)
         {
             var response = await client.GetAsync(url);
@@ -70,6 +79,10 @@ namespace Manga_Notifier.Crawling
             return await client.GetStringAsync(url);
         }
 
+        /// <summary>
+        /// Creates the client for the crawler (can be moved to seperate class if needed)
+        /// </summary>
+        /// <returns></returns>
         private HttpClient ClientGenerator()
         {
             HttpClient client = new()

@@ -12,11 +12,11 @@ namespace Manga_Notifier.Scanlators
     public class Reaperscans : IScanlators
     {
         private readonly string url;
-        private readonly List<Series_Info> seriesInfo;
+        private readonly List<Comic_Info> seriesInfo;
         public Reaperscans(string url)
         {
             this.url = url;
-            seriesInfo = new List<Series_Info>();
+            seriesInfo = new List<Comic_Info>();
         }
 
         public List<string> GetAllComics(string responsBody)
@@ -41,7 +41,7 @@ namespace Manga_Notifier.Scanlators
             var m = Regex.Match(comicURL, "([0-9]+)");
             var scanlator = new Regex("(?<=:\\/\\/)(?:.*)(?=\\.)").Match(url).Value;
 
-            seriesInfo.Add(new Series_Info
+            seriesInfo.Add(new Comic_Info
             {
                 Scanlator = char.ToUpper(scanlator[0]) + scanlator.Substring(1),
                 Name = htmlDocument.DocumentNode.SelectSingleNode("//h1[1]").InnerText.Trim(),
@@ -52,6 +52,6 @@ namespace Manga_Notifier.Scanlators
         }
 
         public string Url => url;
-        public List<Series_Info> SeriesInfo => seriesInfo;
+        public List<Comic_Info> SeriesInfo => seriesInfo;
     }
 }
