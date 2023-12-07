@@ -1,4 +1,4 @@
-using Manga_Notifier;
+ï»¿using Manga_Notifier;
 using System;
 using System.Security.Claims;
 
@@ -6,20 +6,16 @@ namespace Unit_Tests
 {
     public class SourceViewParserTest
     {
-        string AsuraAllComicPath = "..//..//../SourceViews\\Asurascans\\Manga – Asura Scans.html";
-        string AsuraSingle1ComicPath = "..//..//../SourceViews\\Asurascans\\SSS-Class Suicide Hunter – Asura Scans.html";
-        string AsuraSingle2ComicPath = "..//..//../SourceViews\\Asurascans\\Terminally-Ill Genius Dark Knight – Asura Scans.html";
-        string AsuraSingle3ComicPath = "..//..//../SourceViews\\Asurascans\\The Reincarnated Assassin is a Genius Swordsman – Asura Scans.html";
-        string FlameAllComicPath = "..//..//../SourceViews\\Flamescans\\Manga Archive - Flame Comics.html";
-        string FlameSingle1ComicPath = "..//..//../SourceViews\\Flamescans\\In the Night Consumed by Blades, I Walk - Flame Comics.html";
-        string FlameSingle2ComicPath = "..//..//../SourceViews\\Flamescans\\Is This Hero for Real_ - Flame Comics.html";
-        string FlameSingle3ComicPath = "..//..//../SourceViews\\Flamescans\\I'll be Taking a Break for Personal Reasons - Flame Comics.html";
+
+        readonly TestFiles testFiles;
 
         readonly IScanlators asurascans;
         readonly IScanlators flamescans;
 
         public SourceViewParserTest() 
         {
+            testFiles = new TestFiles();
+
             asurascans = new Asurascans(""); //URL is currently not needed
             flamescans = new FlamScans(""); //URL is currently not needed
         }
@@ -27,7 +23,7 @@ namespace Unit_Tests
         [Fact]
         public void ParseAllComicsAsura()
         {
-            var webpage = File.ReadAllText(AsuraAllComicPath);
+            var webpage = File.ReadAllText(testFiles.AsuraAllComicPath);
             var comicamount = asurascans.GetAllComics(webpage);
             Assert.Equal(20, comicamount.Count);
         }
@@ -35,7 +31,7 @@ namespace Unit_Tests
         [Fact]
         public void ParseSingleComicAsura()
         {
-            var webpage = File.ReadAllText(AsuraSingle1ComicPath);
+            var webpage = File.ReadAllText(testFiles.AsuraSingle1ComicPath);
             asurascans.ParseURLS(webpage);
             Assert.Single(asurascans.SeriesInfo);
             Assert.Equal("SSS-Class Suicide Hunter", asurascans.SeriesInfo[0].Name);
@@ -47,9 +43,9 @@ namespace Unit_Tests
         [Fact]
         public void ParseMultipleSingleComicAsura()
         {
-            asurascans.ParseURLS(File.ReadAllText(AsuraSingle1ComicPath));
-            asurascans.ParseURLS(File.ReadAllText(AsuraSingle2ComicPath));
-            asurascans.ParseURLS(File.ReadAllText(AsuraSingle3ComicPath));
+            asurascans.ParseURLS(File.ReadAllText(testFiles.AsuraSingle1ComicPath));
+            asurascans.ParseURLS(File.ReadAllText(testFiles.AsuraSingle2ComicPath));
+            asurascans.ParseURLS(File.ReadAllText(testFiles.AsuraSingle3ComicPath));
 
             Assert.Equal(3, asurascans.SeriesInfo.Count);
             Assert.Equal("SSS-Class Suicide Hunter", asurascans.SeriesInfo[0].Name);
@@ -72,7 +68,7 @@ namespace Unit_Tests
         [Fact]
         public void ParseAllComicsFlame()
         {
-            var webpage = File.ReadAllText(FlameAllComicPath);
+            var webpage = File.ReadAllText(testFiles.FlameAllComicPath);
             var comicamount = flamescans.GetAllComics(webpage);
             Assert.Equal(24, comicamount.Count);
         }
@@ -80,7 +76,7 @@ namespace Unit_Tests
         [Fact]
         public void ParseSingleComicFlame()
         {
-            var webpage = File.ReadAllText(FlameSingle1ComicPath);
+            var webpage = File.ReadAllText(testFiles.FlameSingle1ComicPath);
             flamescans.ParseURLS(webpage);
             Assert.Single(flamescans.SeriesInfo);
             Assert.Equal("In the Night Consumed by Blades, I Walk", flamescans.SeriesInfo[0].Name);
@@ -92,14 +88,14 @@ namespace Unit_Tests
         [Fact]
         public void ParseMultipleSingleComicFlame()
         {
-            flamescans.ParseURLS(File.ReadAllText(FlameSingle1ComicPath));
-            flamescans.ParseURLS(File.ReadAllText(FlameSingle2ComicPath));
-            flamescans.ParseURLS(File.ReadAllText(FlameSingle3ComicPath));
+            flamescans.ParseURLS(File.ReadAllText(testFiles.FlameSingle1ComicPath));
+            flamescans.ParseURLS(File.ReadAllText(testFiles.FlameSingle2ComicPath));
+            flamescans.ParseURLS(File.ReadAllText(testFiles.FlameSingle3ComicPath));
 
             Assert.Equal(3, flamescans.SeriesInfo.Count);
             Assert.Equal("In the Night Consumed by Blades, I Walk", flamescans.SeriesInfo[0].Name);
             Assert.Equal("Is This Hero for Real?", flamescans.SeriesInfo[1].Name);
-            Assert.Equal("I’ll be Taking a Break for Personal Reasons", flamescans.SeriesInfo[2].Name);
+            Assert.Equal("Iâ€™ll be Taking a Break for Personal Reasons", flamescans.SeriesInfo[2].Name);
 
             Assert.Equal("https://flamecomics.com/in-the-night-consumed-by-blades-i-walk-chapter-87/", flamescans.SeriesInfo[0].URL);
             Assert.Equal("https://flamecomics.com/is-this-hero-for-real-chapter-95/", flamescans.SeriesInfo[1].URL);
