@@ -1,4 +1,4 @@
-using Manga_Notifier;
+﻿using Manga_Notifier;
 using System;
 using System.Security.Claims;
 
@@ -95,7 +95,7 @@ namespace Unit_Tests
             Assert.Equal(3, flamescans.SeriesInfo.Count);
             Assert.Equal("In the Night Consumed by Blades, I Walk", flamescans.SeriesInfo[0].Name);
             Assert.Equal("Is This Hero for Real?", flamescans.SeriesInfo[1].Name);
-            Assert.Equal("I�ll be Taking a Break for Personal Reasons", flamescans.SeriesInfo[2].Name);
+            Assert.Equal("I’ll be Taking a Break for Personal Reasons", flamescans.SeriesInfo[2].Name);
 
             Assert.Equal("https://flamecomics.com/in-the-night-consumed-by-blades-i-walk-chapter-87/", flamescans.SeriesInfo[0].URL);
             Assert.Equal("https://flamecomics.com/is-this-hero-for-real-chapter-95/", flamescans.SeriesInfo[1].URL);
