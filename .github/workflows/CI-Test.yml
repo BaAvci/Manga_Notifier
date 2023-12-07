@@ -15,4 +15,4 @@ jobs:
       - name: Build
         run: dotnet build
       - name: Test with the dotnet CLI
-        run: dotnet test --filter "FullyQualifiedName~Unit_Tests.SourceViewParseTest.cs"
+        run: dotnet test 
