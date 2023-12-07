@@ -1,13 +1,13 @@
-﻿using Manga_Notifier.Crawling;
+using Manga_Notifier.Crawling;
 using Manga_Notifier.Scanlators;
 using Manga_Notifier.Scanlators.Model;
 using System;
 
-namespace MyApp // Note: actual namespace depends on the project name.
+namespace Manga_Notifier // Note: actual namespace depends on the project name.
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Crawler crawler = new();
 
@@ -20,8 +20,8 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
             foreach (IScanlators scans in scanlators)
             {
-                await crawler.GetWebPage(scans.Url, scans);
-                foreach (Series_Info series_Info in scans.SeriesInfo)
+                crawler.Crawl(scans);
+                foreach (var series_Info in scans.SeriesInfo)
                 {
                     Console.WriteLine(series_Info.Name);
                     Console.WriteLine(series_Info.URL);
