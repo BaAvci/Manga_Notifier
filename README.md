@@ -10,8 +10,6 @@ Manga Notifier is a C# project that crawls websites and notfies the user if a ce
 2. SSMS installed
 3. Ability to connect to following server: "SERVER:Localhost"
 
-#
-To be continued 
 ### Preparation
 1. Create all needed tables in database
 2. Add URL for comic page
