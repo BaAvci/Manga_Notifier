@@ -29,6 +29,7 @@
   <ItemGroup>
     <Folder Include="SourceViews\Asurascans\" />
     <Folder Include="SourceViews\Flamescans\" />
+    <Folder Include="SourceViews\Reaperscans\" />
   </ItemGroup>
 
 </Project>

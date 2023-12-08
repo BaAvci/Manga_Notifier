@@ -14,8 +14,8 @@ namespace Manga_Notifier // Note: actual namespace depends on the project name.
             List<IScanlators> scanlators = new()
             {
                 new Asurascans("https://asuratoon.com/manga/?order=update"),
-                new FlamScans("https://flamecomics.com/series/?order=update"),
-                //new Reaperscans("https://reaperscans.com/latest/comics")
+                new FlameScans("https://flamecomics.com/series/?order=update"),
+                new Reaperscans("https://reapercomics.com/latest/comics")
             };
 
             foreach (IScanlators scans in scanlators)
