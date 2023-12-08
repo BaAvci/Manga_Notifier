@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Discord_Bot\Discord_Bot.csproj" />
     <ProjectReference Include="..\MangaNotifier\Manga_Notifier.csproj" />
   </ItemGroup>
 
