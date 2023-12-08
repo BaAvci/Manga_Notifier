@@ -25,9 +25,12 @@ namespace Manga_Notifier.Scanlators
             List<string> comicSeriesInfos = new();
             htmlDocument.LoadHtml(responsBody);
             var nodes = htmlDocument.DocumentNode.SelectNodes("//div[contains(@class, \"grid\")][1]/div/div/a/@href");
-            foreach(var node in nodes)
+            if (nodes is not null)
             {
-                comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
+                foreach(var node in nodes)
+                {
+                    comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
+                }
             }
             return comicSeriesInfos;
         }

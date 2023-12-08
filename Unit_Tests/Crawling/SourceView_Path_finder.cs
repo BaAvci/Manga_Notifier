@@ -18,6 +18,11 @@ namespace Unit_Tests.Crawling
         public readonly string FlameSingle2ComicPath;
         public readonly string FlameSingle3ComicPath;
 
+        public readonly string ReaperAllComicPath;
+        public readonly string ReaperSingle1ComicPath;
+        public readonly string ReaperSingle2ComicPath;
+        public readonly string ReaperSingle3ComicPath;
+
         public SourceView_Path_finder()
         {
             AsuraAllComicPath = GetFileViews("Asurascans", "Manga – Asura Scans.html");
@@ -29,6 +34,11 @@ namespace Unit_Tests.Crawling
             FlameSingle1ComicPath = GetFileViews("Flamescans", "In the Night Consumed by Blades, I Walk - Flame Comics.html");
             FlameSingle2ComicPath = GetFileViews("Flamescans", "Is This Hero for Real_ - Flame Comics.html");
             FlameSingle3ComicPath = GetFileViews("Flamescans", "I'll be Taking a Break for Personal Reasons - Flame Comics.html");
+
+            ReaperAllComicPath = GetFileViews("Reaperscans", "Latest Comics - Reaper Scans.html");
+            ReaperSingle1ComicPath = GetFileViews("Reaperscans", "Never Die Extra - Reaper Scans.html");
+            ReaperSingle2ComicPath = GetFileViews("Reaperscans", "SSS-Class Suicide Hunter - Reaper Scans.html");
+            ReaperSingle3ComicPath = GetFileViews("Reaperscans", "The Reincarnated Assassin is a Genius Swordsman - Reaper Scans.html");
         }
         /// <summary>
         /// Get's the root directory of the currently executed method
@@ -59,6 +69,5 @@ namespace Unit_Tests.Crawling
             var first = new string[] { GetSourceViews() };
             return Path.Join(first.Concat(fragments).ToArray());
         }
-
     }
 }

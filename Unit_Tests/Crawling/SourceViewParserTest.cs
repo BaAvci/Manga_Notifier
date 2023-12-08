@@ -18,7 +18,7 @@ namespace Unit_Tests
             testFiles = new SourceView_Path_finder();
 
             asurascans = new Asurascans("https://asuratoon.com/manga/?order=update"); 
-            flamescans = new FlamScans("https://flamecomics.com/series/?order=update");
+            flamescans = new FlameScans("https://flamecomics.com/series/?order=update");
         }
 
         [Fact]
@@ -121,6 +121,79 @@ namespace Unit_Tests
             Assert.Equal(91628, flamescans.SeriesInfo[0].Id);
             Assert.Equal(71331, flamescans.SeriesInfo[1].Id);
             Assert.Equal(108114, flamescans.SeriesInfo[2].Id);
+        }
+
+        [Fact]
+        public void ParseDifferentScanlators()
+        {
+            flamescans.ParseURLS(File.ReadAllText(testFiles.FlameSingle1ComicPath));
+            asurascans.ParseURLS(File.ReadAllText(testFiles.AsuraSingle1ComicPath));
+
+            Assert.Single(asurascans.SeriesInfo);
+            Assert.Single(flamescans.SeriesInfo);
+
+            Assert.Equal("Flamecomics", flamescans.SeriesInfo[0].Scanlator);
+            Assert.Equal("Asuratoon", asurascans.SeriesInfo[0].Scanlator);
+
+            Assert.Equal("In the Night Consumed by Blades, I Walk", flamescans.SeriesInfo[0].Name);
+            Assert.Equal("SSS-Class Suicide Hunter", asurascans.SeriesInfo[0].Name);
+            
+            Assert.Equal("https://flamecomics.com/in-the-night-consumed-by-blades-i-walk-chapter-87/", flamescans.SeriesInfo[0].URL);
+            Assert.Equal("https://asuratoon.com/7117659858-sss-class-suicide-hunter-chapter-103/", asurascans.SeriesInfo[0].URL);
+            
+            Assert.Equal("87", flamescans.SeriesInfo[0].ChapterName);
+            Assert.Equal("Chapter 103", asurascans.SeriesInfo[0].ChapterName);
+            
+            Assert.Equal(91628, flamescans.SeriesInfo[0].Id);
+            Assert.Equal(31591, asurascans.SeriesInfo[0].Id);
+        }
+
+        [Fact]
+        public void WrongFlameURLs()
+        {
+            var flamescansWithReaperscansURL = new FlameScans("https://reapercomics.com/latest/comics");
+            var flamescansWithAsurascansURL = new FlameScans("https://asuratoon.com/manga/?order=update");
+
+            var reaperWebpage = File.ReadAllText(testFiles.ReaperAllComicPath);
+            var asuraWebpage = File.ReadAllText(testFiles.AsuraAllComicPath);
+
+            var reaperComicAmount = flamescansWithReaperscansURL.GetAllComics(reaperWebpage);
+            var asuraComicAmount = flamescansWithAsurascansURL.GetAllComics(asuraWebpage);
+
+            Assert.Empty(reaperComicAmount);
+            Assert.Equal(20,asuraComicAmount.Count);
+        }
+
+        [Fact]
+        public void WrongAsuraURLs()
+        {
+            var asurascansWithReaperscansURL = new Asurascans("https://reapercomics.com/latest/comics");
+            var asurascansWithFlamescansURL = new Asurascans("https://flamecomics.com/series/?order=update");
+
+            var reaperWebpage = File.ReadAllText(testFiles.ReaperAllComicPath);
+            var flameWebpage = File.ReadAllText(testFiles.FlameAllComicPath);
+
+            var reaperComicAmount = asurascansWithReaperscansURL.GetAllComics(reaperWebpage);
+            var flameComicAmount = asurascansWithFlamescansURL.GetAllComics(flameWebpage);
+
+            Assert.Empty(reaperComicAmount);
+            Assert.Equal(24,flameComicAmount.Count);
+        }
+
+        [Fact]
+        public void WrongReaperURLs()
+        {
+            var reaperscansWithAsurascansURL = new Reaperscans("https://asuratoon.com/manga/?order=update");
+            var reaperscansWithFlamescansURL = new Reaperscans("https://flamecomics.com/series/?order=update");
+
+            var asuraWebpage = File.ReadAllText(testFiles.AsuraAllComicPath);
+            var flameWebpage = File.ReadAllText(testFiles.FlameAllComicPath);
+
+            var asuraComicAmount = reaperscansWithAsurascansURL.GetAllComics(asuraWebpage);
+            var flameComicAmount = reaperscansWithFlamescansURL.GetAllComics(flameWebpage);
+
+            Assert.Empty(asuraComicAmount);
+            Assert.Empty(flameComicAmount);
         }
     }
 }

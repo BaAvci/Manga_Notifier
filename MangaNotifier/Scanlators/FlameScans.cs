@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Manga_Notifier.Scanlators
 {
-    public class FlamScans : IScanlators
+    public class FlameScans : IScanlators
     {
         private readonly string url;
         private readonly List<Comic_Info> seriesInfo;
-        public FlamScans(string url)
+        public FlameScans(string url)
         {
             this.url = url;
             seriesInfo = new List<Comic_Info>();
@@ -25,9 +25,12 @@ namespace Manga_Notifier.Scanlators
             List<string> comicSeriesInfos = new();
             htmlDocument.LoadHtml(responsBody);
             var nodes = htmlDocument.DocumentNode.SelectNodes("//div[@class='bs']/div/a");
-            foreach(var node in nodes)
+            if(nodes is not null)
             {
-                comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
+                foreach(var node in nodes)
+                {
+                    comicSeriesInfos.Add(node.GetAttributeValue("href", string.Empty));
+                }
             }
             return comicSeriesInfos;
         }
