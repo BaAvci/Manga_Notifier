@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Discord_Bot/Properties/launchSettings.json
+/MangaNotifier/Properties/launchSettings.json
+/Unit_Tests/Properties/launchSettings.json

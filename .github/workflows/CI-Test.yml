@@ -15,5 +15,6 @@ jobs:
       - name: Build
         run: dotnet build
       - name: Test with the dotnet CLI
-        run: dotnet test 
+        run: dotnet test
         working-directory: Unit_Tests
+
