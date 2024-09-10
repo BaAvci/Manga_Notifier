@@ -1,8 +1,5 @@
 name: Test
 on: push
-
-env:
-  DISCORD_TOKEN: ${{ secrets.DiscordToken }}
 jobs:
   build:
     runs-on: ubuntu-latest
