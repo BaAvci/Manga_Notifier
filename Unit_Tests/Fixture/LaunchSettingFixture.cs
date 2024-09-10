@@ -8,8 +8,8 @@ namespace Unit_Tests.Crawling
     {
         public LaunchSettingFixture()
         {
-            if(System.IO.File.Exists("../../../Properties/launchSettings.json"))
-            {
+            try 
+            { 
                 using(var file = File.OpenText("../../../Properties/launchSettings.json"))
                 {
                     var reader = new JsonTextReader(file);
@@ -29,6 +29,7 @@ namespace Unit_Tests.Crawling
                     }
                 }
             }
+            catch(Exception ex) { }
         }
 
         public void Dispose() { }
