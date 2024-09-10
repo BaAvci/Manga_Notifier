@@ -23,7 +23,7 @@ namespace Unit_Tests.Crawling
             bot = new Discord_Bot.Bot(channelID);
         }
 
-        [Fact]
+        [Fact(Skip = "Secret Token from Github Secrets can not be used as an environment variable while using the actions Feature. Atleast with my knowledge.")]
         public async void Test()
         {
             var webpage = File.ReadAllText(path_Finder.AsuraSingle1ComicPath);
