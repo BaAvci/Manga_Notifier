@@ -29,7 +29,10 @@ namespace Unit_Tests.Crawling
                     }
                 }
             }
-            catch(Exception ex) { }
+            catch(Exception ex)
+            {
+                Environment.SetEnvironmentVariable("DISCORD_TOKEN", Environment.GetEnvironmentVariable("DISCORD_TOKEN_GH"));
+            }
         }
 
         public void Dispose() { }
