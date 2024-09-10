@@ -17,3 +17,5 @@ jobs:
       - name: Test with the dotnet CLI
         run: dotnet test 
         working-directory: Unit_Tests
+        env:
+          DISCORD_TOKEN: ${{secrets.GITHUB_TOKEN}}
