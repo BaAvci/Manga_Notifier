@@ -14,6 +14,11 @@ jobs:
           dotnet-version: 6.x
       - name: Install dependencies
         run: dotnet restore
+      - shell: pwsh
+        env:
+          DISCORD_TOKEN: ${{ secrets.DiscordToken }}
+        run: |
+          example-command "$env:DISCORD_TOKEN"
       - name: Build
         run: dotnet build
       - name: Test with the dotnet CLI
