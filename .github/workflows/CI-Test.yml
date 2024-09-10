@@ -18,6 +18,6 @@ jobs:
       - name: Build
         run: dotnet build
       - name: Test with the dotnet CLI
-        run: dotnet test --filter "FullyQualifiedName~Unit_Tests.Crawling.SourceView*"
+        run: dotnet test --filter "Unit_Tests.Crawling.SourceView*"
         working-directory: Unit_Tests
 
