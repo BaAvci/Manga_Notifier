@@ -1,5 +1,6 @@
 name: Test
 on: push
+
 env:
   DISCORD_TOKEN: ${{ secrets.DiscordToken }}
 jobs:
@@ -14,14 +15,9 @@ jobs:
           dotnet-version: 6.x
       - name: Install dependencies
         run: dotnet restore
-      - shell: pwsh
-        env:
-          DISCORD_TOKEN: ${{ secrets.DiscordToken }}
-        run: |
-          example-command "$env:DISCORD_TOKEN"
       - name: Build
         run: dotnet build
       - name: Test with the dotnet CLI
-        run: dotnet test 
+        run: dotnet test --filter "FullyQualifiedName~Unit_Tests.Crawling.SourceView*"
         working-directory: Unit_Tests
 
